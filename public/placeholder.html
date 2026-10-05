@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.__DEMO={"prefix": "", "space": "lodge", "base": ""}</script><script src="/_demo/data-lodge.js"></script><script src="/_demo/demo.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>woltspace</title>
+<link href="https://fonts.googleapis.com/css2?family=Preahvihear&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #EDE8DE;
+    color: #18100A;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    text-align: center;
+  }
+  .brand {
+    font-family: 'Preahvihear', sans-serif;
+    font-size: 36px;
+    color: #18100A;
+    letter-spacing: -0.01em;
+  }
+  .brand-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sigil {
+    font-size: 1.8rem;
+    line-height: 1;
+    transition: opacity 0.3s ease;
+  }
+  .terminal {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #d4c5a8;
+    width: 240px;
+    background: #1a130c;
+    border: 1px solid #2a1f14;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(24,16,10,0.08);
+    overflow: hidden;
+    text-align: left;
+    margin-top: 4px;
+  }
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: #211810;
+    border-bottom: 1px solid #2a1f14;
+  }
+  .terminal-dot { width: 8px; height: 8px; border-radius: 50%; background: #3a2a1c; }
+  .terminal-dot.r { background: #c4531e; }
+  .terminal-dot.y { background: #c98b2a; }
+  .terminal-dot.g { background: #3a6644; }
+  .terminal-body {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 12px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .spinner {
+    color: #5BC87A;
+    font-size: 14px;
+    width: 12px;
+    display: inline-block;
+  }
+  .status {
+    transition: opacity 0.32s ease;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
+</head>
+<body>
+<div class="center">
+  <div class="brand-row">
+    <span class="sigil" id="sigil">🦫</span>
+    <span class="brand">woltspace</span>
+  </div>
+  <div class="terminal">
+    <div class="terminal-bar">
+      <span class="terminal-dot r"></span>
+      <span class="terminal-dot y"></span>
+      <span class="terminal-dot g"></span>
+    </div>
+    <div class="terminal-body">
+      <span class="spinner" id="spinner">⠋</span>
+      <span class="status" id="status">the lodge is quiet</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  var creatures = ['🦫','🦝','🦦','🐺','🐶','🌲','🪵','🍂'];
+  var sigilEl = document.getElementById('sigil');
+  var c = 0;
+  setInterval(function() {
+    sigilEl.style.opacity = '0';
+    setTimeout(function() {
+      c = (c + 1) % creatures.length;
+      sigilEl.textContent = creatures[c];
+      sigilEl.style.opacity = '1';
+    }, 250);
+  }, 2600);
+
+  var phrases = [
+    'the lodge is quiet',
+    'fire still warm',
+    'wood creaks',
+    'waiting for footsteps',
+    'wind through the pines',
+    'river hums outside',
+  ];
+  var statusEl = document.getElementById('status');
+  var p = 0;
+  setInterval(function() {
+    statusEl.style.opacity = '0';
+    setTimeout(function() {
+      p = (p + 1) % phrases.length;
+      statusEl.textContent = phrases[p];
+      statusEl.style.opacity = '1';
+    }, 320);
+  }, 3200);
+
+  var frames = ['⠋','⠙','⠹','⠸','⠼','⠴','⠦','⠧','⠇','⠏'];
+  var spinEl = document.getElementById('spinner');
+  var f = 0;
+  setInterval(function() {
+    f = (f + 1) % frames.length;
+    spinEl.textContent = frames[f];
+  }, 90);
+</script>
+</body>
+</html>

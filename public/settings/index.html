@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.__DEMO={"prefix": "", "space": "lodge", "base": ""}</script><script src="/_demo/data-lodge.js"></script><script src="/_demo/demo.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings · Woltspace</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦫</text></svg>">
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#18100A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="/static/icon-192.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Preahvihear&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=1791141141">
+<link rel="stylesheet" href="/static/design-system.css?v=1791141141">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/css/xterm.min.css">
+<link rel="stylesheet" href="/static/lodge-tools.css?v=1791141141">
+
+</head>
+<body>
+
+
+
+<button class="hamburger" onclick="toggleSidebar()">☰</button>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-name">
+      <span class="brand-emoji">🦫</span>
+      Woltspace
+    </div>
+  </div>
+
+  <div class="sidebar-nav">
+    <a class="sidebar-nav-item" id="nav-home" href="/" onclick="showView('home');return false">
+      <span class="sidebar-nav-icon">🏠</span>
+      <span class="sidebar-nav-label">Home</span>
+    </a>
+    <a class="sidebar-nav-item" id="nav-wolts" href="/?view=wolts" onclick="showView('wolts');return false">
+      <span class="sidebar-nav-icon">🦫</span>
+      <span class="sidebar-nav-label">Wolts</span>
+    </a>
+    <a class="sidebar-nav-item" id="nav-sessions" href="/?view=sessions" onclick="showView('sessions');return false">
+      <span class="sidebar-nav-icon">💬</span>
+      <span class="sidebar-nav-label">Sessions</span>
+      <span class="nav-badge" id="sessions-badge"></span>
+    </a>
+    <a class="sidebar-nav-item" id="nav-apps" href="/?view=apps" onclick="showView('apps');return false">
+      <span class="sidebar-nav-icon">🪓</span>
+      <span class="sidebar-nav-label">Apps</span>
+    </a>
+    <a class="sidebar-nav-item" id="nav-wolves" href="/wolves">
+      <span class="sidebar-nav-icon">🐺</span>
+      <span class="sidebar-nav-label">Wolves</span>
+    </a>
+    <a class="sidebar-nav-item" id="nav-connectors" href="/connectors">
+      <span class="sidebar-nav-icon">🔌</span>
+      <span class="sidebar-nav-label">Connectors</span>
+    </a>
+  </div>
+
+  <div class="sidebar-scroll">
+  <div class="sidebar-section" id="sidebar-team-section">
+    <div class="sidebar-section-label">
+      Team <span id="sidebar-team-count" style="color:rgba(255,255,255,0.4)"></span>
+      <button type="button" class="sidebar-create-wolt" onclick="openCreateWolt(event)">
+        <span aria-hidden="true">+</span> Create wolt
+      </button>
+    </div>
+    <div id="sidebar-wolts"></div>
+  </div>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="sidebar-footer">
+      <a href="/tui">terminal</a>
+      <a href="/settings">⚙ settings</a>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  
+<div class="ds-page settings-page" data-settings-root data-default-harness="claude">
+  <header class="ds-page-header">
+  <div>
+    <p class="ds-eyebrow">Lodge controls</p>
+    <h1 class="ds-page-title">Settings</h1>
+    <p class="ds-page-description">Shape how the lodge behaves without reaching for a config file.</p>
+  </div>
+  <div class="ds-page-actions">
+    <span class="ds-save-state" data-global-state role="status" aria-live="polite">
+      <span class="ds-save-dot"></span><span data-global-message>Changes save here</span>
+    </span>
+  </div>
+</header>
+
+  <div class="settings-layout">
+    <nav class="settings-index" aria-label="Settings sections">
+      <p class="settings-index-label">Configuration</p>
+      
+<a class="ds-tab active" href="#harnesses" aria-current="page">
+
+  <span>Harnesses</span><small>lodge default</small>
+</a>
+      
+<a class="ds-tab" href="#sessions">
+
+  <span>Sessions</span><small>idle policy</small>
+</a>
+      
+<span class="ds-tab disabled" aria-disabled="true">
+
+  <span>Notifications</span><small>coming down the trail</small>
+</span>
+      
+<span class="ds-tab disabled" aria-disabled="true">
+
+  <span>Desktop</span><small>after the Mac build</small>
+</span>
+    </nav>
+
+    <div class="settings-content" id="harnesses">
+      <section class="ds-panel">
+  <header class="ds-panel-header">
+    <div>
+      <h2 class="ds-panel-title">Lodge harness</h2>
+      <p class="ds-panel-description">Used when a wolt follows the lodge setting.</p>
+    </div>
+    <span class="ds-pill">new sessions</span>
+  </header>
+  <div class="ds-panel-body">
+        <fieldset class="ds-choice-group" data-default-form data-saved-value="claude">
+          <legend class="sr-only">Default agent engine</legend>
+          
+            <label class="ds-choice-card">
+  <input class="ds-choice-input" type="radio" name="default-harness" value="claude" checked>
+  <span class="ds-choice-indicator" aria-hidden="true"></span>
+  <span class="ds-choice-emoji" aria-hidden="true">🟠</span>
+  <span class="ds-choice-copy">
+    <span class="ds-choice-title">Claude Code</span>
+    <span class="ds-choice-description"></span>
+  </span>
+  
+</label>
+          
+            <label class="ds-choice-card">
+  <input class="ds-choice-input" type="radio" name="default-harness" value="codex">
+  <span class="ds-choice-indicator" aria-hidden="true"></span>
+  <span class="ds-choice-emoji" aria-hidden="true">⬛</span>
+  <span class="ds-choice-copy">
+    <span class="ds-choice-title">Codex</span>
+    <span class="ds-choice-description"></span>
+  </span>
+  
+</label>
+          
+            <label class="ds-choice-card">
+  <input class="ds-choice-input" type="radio" name="default-harness" value="opencode">
+  <span class="ds-choice-indicator" aria-hidden="true"></span>
+  <span class="ds-choice-emoji" aria-hidden="true">🟦</span>
+  <span class="ds-choice-copy">
+    <span class="ds-choice-title">opencode</span>
+    <span class="ds-choice-description"></span>
+  </span>
+  
+</label>
+          
+        </fieldset>
+      </div>
+</section>
+
+      <div class="ds-callout" role="note">
+        <span class="ds-callout-icon" aria-hidden="true">🌿</span>
+        <div><strong>New sessions only</strong><p>Sessions already running keep the harness they started with.</p></div>
+      </div>
+
+      
+      <section class="ds-panel">
+  <header class="ds-panel-header">
+    <div>
+      <h2 class="ds-panel-title">Default models</h2>
+      <p class="ds-panel-description">The model a wolt gets for each working style. A wolt with its own model keeps it.</p>
+    </div>
+    <span class="ds-pill">new sessions</span>
+  </header>
+  <div class="ds-panel-body">
+        
+          
+          
+          <p class="ds-label settings-tier-harness">Claude Code</p>
+          
+            
+            
+            <div class="ds-field">
+  <div class="ds-field-copy">
+    <label class="ds-label" for="tier-claude-raccoon">Raccoon</label>
+    <p class="ds-help" id="tier-claude-raccoon-help">thinker</p>
+  </div>
+  <div class="ds-field-control">
+              <div class="ds-select-stack" data-tier-row data-saved-value="opus">
+                <select class="ds-select" id="tier-claude-raccoon" data-tier-select data-harness="claude" data-harness-label="Claude Code" data-tier="raccoon" data-tier-label="Raccoon">
+                  
+                  
+                    <option value="opus" selected>Opus</option>
+                  
+                    <option value="sonnet">Sonnet</option>
+                  
+                    <option value="haiku">Haiku</option>
+                  
+                    <option value="fable">Fable</option>
+                  
+                </select>
+              </div>
+            </div>
+</div>
+          
+            
+            
+            <div class="ds-field">
+  <div class="ds-field-copy">
+    <label class="ds-label" for="tier-claude-beaver">Beaver</label>
+    <p class="ds-help" id="tier-claude-beaver-help">builder</p>
+  </div>
+  <div class="ds-field-control">
+              <div class="ds-select-stack" data-tier-row data-saved-value="sonnet">
+                <select class="ds-select" id="tier-claude-beaver" data-tier-select data-harness="claude" data-harness-label="Claude Code" data-tier="beaver" data-tier-label="Beaver">
+                  
+                  
+                    <option value="opus">Opus</option>
+                  
+                    <option value="sonnet" selected>Sonnet</option>
+                  
+                    <option value="haiku">Haiku</option>
+                  
+                    <option value="fable">Fable</option>
+                  
+                </select>
+              </div>
+            </div>
+</div>
+          
+            
+            
+            <div class="ds-field">
+  <div class="ds-field-copy">
+    <label class="ds-label" for="tier-claude-otter">Otter</label>
+    <p class="ds-help" id="tier-claude-otter-help">quick</p>
+  </div>
+  <div class="ds-field-control">
+              <div class="ds-select-stack" data-tier-row data-saved-value="haiku">
+                <select class="ds-select" id="tier-claude-otter" data-tier-select data-harness="claude" data-harness-label="Claude Code" data-tier="otter" data-tier-label="Otter">
+                  
+                  
+                    <option value="opus">Opus</option>
+                  
+                    <option value="sonnet">Sonnet</option>
+                  
+                    <option value="haiku" selected>Haiku</option>
+                  
+                    <option value="fable">Fable</option>
+                  
+                </select>
+              </div>
+            </div>
+</div>
+          
+        
+          
+          
+          <p class="ds-label settings-tier-harness">Codex</p>
+          
+            
+            
+            <div class="ds-field">
+  <div class="ds-field-copy">
+    <label class="ds-label" for="tier-codex-raccoon">Raccoon</label>
+    <p class="ds-help" id="tier-codex-raccoon-help">thinker</p>
+  </div>
+  <div class="ds-field-control">
+              <div class="ds-select-stack" data-tier-row data-saved-value="gpt-6-astra">
+                <select class="ds-select" id="tier-codex-raccoon" data-tier-select data-harness="codex" data-harness-label="Codex" data-tier="raccoon" data-tier-label="Raccoon">
+                  
+                  
+                    <option value="gpt-6-astra" selected>GPT-6-Astra</option>
+                  
+                    <option value="gpt-6-sol">GPT-6-Sol</option>
+                  
+                    <option value="gpt-6-luna">GPT-6-Luna</option>
+                  
+                    <option value="gpt-5.5">GPT-5.5</option>
+                  
+                    <option value="gpt-5.6-terra">GPT-5.6 Terra</option>
+                  
+                    <option value="gpt-5.6-luna">GPT-5.6 Luna</option>
+                  
+                    <option value="gpt-5.6-sol">GPT-5.6 Sol</option>
+                  
+                </select>
+              </div>
+            </div>
+</div>
+          
+            
+            
+            <div class="ds-field">
+  <div class="ds-field-copy">
+    <label class="ds-label" for="tier-codex-beaver">Beaver</label>
+    <p class="ds-help" id="tier-codex-beaver-help">builder</p>
+  </div>
+  <div class="ds-field-control">
+              <div class="ds-select-stack" data-tier-row data-saved-value="gpt-6-sol">
+                <select class="ds-select" id="tier-codex-beaver" data-tier-select data-harness="codex" data-harness-label="Codex" data-tier="beaver" data-tier-label="Beaver">
+                  
+                  
+                    <option value="gpt-6-astra">GPT-6-Astra</option>
+                  
+                    <option value="gpt-6-sol" selected>GPT-6-Sol</option>
+                  
+                    <option value="gpt-6-luna">GPT-6-Luna</option>
+                  
+                    <option value="gpt-5.5">GPT-5.5</option>
+                  
+                    <option value="gpt-5.6-terra">GPT-5.6 Terra</option>
+                  
+                    <option value="gpt-5.6-luna">GPT-5.6 Luna</option>
+                  
+                    <option value="gpt-5.6-sol">GPT-5.6 Sol</option>
+                  
+                </select>
+              </div>
+            </div>
+</div>
+          
+            
+            
+            <div class="ds-field">
+  <div class="ds-field-copy">
+    <label class="ds-label" for="tier-codex-otter">Otter</label>
+    <p class="ds-help" id="tier-codex-otter-help">quick</p>
+  </div>
+  <div class="ds-field-control">
+              <div class="ds-select-stack" data-tier-row data-saved-value="gpt-6-luna">
+                <select class="ds-select" id="tier-codex-otter" data-tier-select data-harness="codex" data-harness-label="Codex" data-tier="otter" data-tier-label="Otter">
+                  
+                  
+                    <option value="gpt-6-astra">GPT-6-Astra</option>
+                  
+                    <option value="gpt-6-sol">GPT-6-Sol</option>
+                  
+                    <option value="gpt-6-luna" selected>GPT-6-Luna</option>
+                  
+                    <option value="gpt-5.5">GPT-5.5</option>
+                  
+                    <option value="gpt-5.6-terra">GPT-5.6 Terra</option>
+                  
+                    <option value="gpt-5.6-luna">GPT-5.6 Luna</option>
+                  
+                    <option value="gpt-5.6-sol">GPT-5.6 Sol</option>
+                  
+                </select>
+              </div>
+            </div>
+</div>
+          
+        
+      </div>
+</section>
+
+      <div id="sessions">
+      <section class="ds-panel">
+  <header class="ds-panel-header">
+    <div>
+      <h2 class="ds-panel-title">Idle sessions</h2>
+      <p class="ds-panel-description">Close sessions nobody has been in touch with, to free resources. Their conversation stays resumable.</p>
+    </div>
+    <span class="ds-pill">lodge-wide</span>
+  </header>
+  <div class="ds-panel-body">
+        <div class="ds-field">
+  <div class="ds-field-copy">
+    <label class="ds-label" for="idle-session-timeout">Close idle sessions after</label>
+    <p class="ds-help" id="idle-session-timeout-help">No contact means no message, notify or page update from the session for this long.</p>
+  </div>
+  <div class="ds-field-control">
+          <div class="ds-select-stack" data-expiry-row data-saved-value="86400">
+            <select class="ds-select" id="idle-session-timeout" data-expiry-select>
+              <option value="">Never</option>
+              <option value="3600">1 hour</option>
+              <option value="14400">4 hours</option>
+              <option value="86400" selected>1 day</option>
+            </select>
+          </div>
+        </div>
+</div>
+      </div>
+</section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ds-toast" data-toast role="status" aria-live="polite" aria-atomic="true">
+  <span class="ds-toast-icon" data-toast-icon>✓</span>
+  <span data-toast-message>Saved</span>
+</div>
+
+</main>
+
+
+<div class="modal-backdrop ds-dialog-backdrop" id="create-modal" onclick="if(event.target===this)closeCreateWolt()">
+  <section class="modal ds-dialog" role="dialog" aria-modal="true" aria-labelledby="create-modal-title" aria-describedby="create-modal-description">
+    <header class="modal-header ds-dialog-header">
+      <div>
+        <h2 class="modal-title" id="create-modal-title">Create a wolt</h2>
+        <p class="ds-dialog-description" id="create-modal-description">Start with a name, then choose how this wolt works.</p>
+      </div>
+      <button type="button" class="modal-close" onclick="closeCreateWolt()" aria-label="Close Create a wolt">&times;</button>
+    </header>
+    
+    <div class="modal-body">
+      <div class="modal-field create-name-field">
+        <label class="modal-label" for="create-name">Wolt name</label>
+        <input type="text" class="modal-input" id="create-name" placeholder="Wolter White" maxlength="40" autocomplete="off" spellcheck="false" oninput="updateCreatePreview()">
+        <p class="create-name-warning" id="create-name-warning" role="alert" hidden></p>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" for="create-harness">Harness <span class="modal-label-hint">(you can change it later in Settings)</span></label>
+        <select class="modal-input" id="create-harness" onchange="selectCreateHarness(this.value)"></select>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Working style</label>
+        <div class="type-grid">
+          <div class="type-card" data-type="otter" onclick="pickType(this)">
+            <div class="type-card-emoji">🦦</div>
+            <div class="type-card-name">Otter</div>
+            <div class="type-card-hint" data-pace="Quick">Quick</div>
+            <div class="type-card-model"></div>
+            <select class="type-card-select" aria-label="Model" hidden></select>
+          </div>
+          <div class="type-card" data-type="beaver" onclick="pickType(this)">
+            <div class="type-card-emoji">🦫</div>
+            <div class="type-card-name">Beaver</div>
+            <div class="type-card-hint" data-pace="Builder">Builder</div>
+            <div class="type-card-model"></div>
+            <select class="type-card-select" aria-label="Model" hidden></select>
+          </div>
+          <div class="type-card" data-type="raccoon" onclick="pickType(this)">
+            <div class="type-card-emoji">🦝</div>
+            <div class="type-card-name">Raccoon</div>
+            <div class="type-card-hint" data-pace="Thinker">Thinker</div>
+            <div class="type-card-model"></div>
+            <select class="type-card-select" aria-label="Model" hidden></select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-error" id="create-error"></div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-ghost" onclick="closeCreateWolt()">Cancel</button>
+      <button type="button" class="btn btn-primary" id="create-submit" onclick="submitCreateWolt()">Create</button>
+    </div>
+
+  </section>
+</div>
+
+<script src="/static/sprites.js?v=1791141141"></script>
+<script src="/static/navigation.js?v=1791141141"></script>
+<script src="/static/session-row.js?v=1791141141"></script>
+<script src="/static/lodge.js?v=1791141141"></script>
+<script type="module" src="/static/terminal.js?v=1791141141"></script>
+
+<script type="module" src="/static/settings.js?v=1791141141"></script>
+
+
+</body>
+</html>

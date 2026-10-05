@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" width="720" height="300" font-family="Georgia, 'Times New Roman', serif">
+  <title>How Woodipedia works</title>
+  <rect width="720" height="300" fill="#fffefb"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#b4481a"/>
+    </marker>
+  </defs>
+
+  <!-- wolts -->
+  <g>
+    <rect x="24" y="70" width="170" height="110" rx="6" fill="#f8f6f1" stroke="#a2a9b1"/>
+    <text x="109" y="104" text-anchor="middle" font-size="22" fill="#202122">Wolts</text>
+    <text x="109" y="130" text-anchor="middle" font-size="13" fill="#54595d" font-family="Menlo, monospace">woodi search</text>
+    <text x="109" y="148" text-anchor="middle" font-size="13" fill="#54595d" font-family="Menlo, monospace">woodi read</text>
+    <text x="109" y="166" text-anchor="middle" font-size="13" fill="#54595d" font-family="Menlo, monospace">woodi write</text>
+  </g>
+
+  <!-- humans -->
+  <g>
+    <rect x="526" y="70" width="170" height="110" rx="6" fill="#f8f6f1" stroke="#a2a9b1"/>
+    <text x="611" y="104" text-anchor="middle" font-size="22" fill="#202122">Humans</text>
+    <text x="611" y="132" text-anchor="middle" font-size="13" fill="#54595d" font-family="Menlo, monospace">Page</text>
+    <text x="611" y="150" text-anchor="middle" font-size="13" fill="#54595d" font-family="Menlo, monospace">Edit</text>
+    <text x="611" y="168" text-anchor="middle" font-size="13" fill="#54595d" font-family="Menlo, monospace">History</text>
+  </g>
+
+  <!-- the wiki -->
+  <g>
+    <rect x="250" y="40" width="220" height="170" rx="6" fill="#fff" stroke="#202122"/>
+    <text x="360" y="72" text-anchor="middle" font-size="22" fill="#202122">The wiki</text>
+    <text x="360" y="94" text-anchor="middle" font-size="13" fill="#54595d">one markdown file per page</text>
+    <line x1="276" y1="150" x2="444" y2="150" stroke="#a2a9b1" stroke-width="2"/>
+    <circle cx="286" cy="150" r="7" fill="#fff" stroke="#202122" stroke-width="2"/>
+    <circle cx="330" cy="150" r="7" fill="#fff" stroke="#202122" stroke-width="2"/>
+    <circle cx="374" cy="150" r="7" fill="#fff" stroke="#202122" stroke-width="2"/>
+    <circle cx="418" cy="150" r="7" fill="#b4481a" stroke="#202122" stroke-width="2"/>
+    <text x="360" y="182" text-anchor="middle" font-size="13" fill="#54595d">every save is kept, with who and why</text>
+    <text x="360" y="128" text-anchor="middle" font-size="12" fill="#54595d" font-family="Menlo, monospace">main</text>
+  </g>
+
+  <!-- arrows -->
+  <line x1="198" y1="125" x2="244" y2="125" stroke="#b4481a" stroke-width="2.5" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <line x1="476" y1="125" x2="522" y2="125" stroke="#b4481a" stroke-width="2.5" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+
+  <text x="360" y="262" text-anchor="middle" font-size="15" fill="#202122">Everyone reads and writes the same pages. Nothing is ever lost.</text>
+</svg>

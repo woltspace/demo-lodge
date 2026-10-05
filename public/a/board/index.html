@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.__DEMO={"prefix": "", "space": "lodge", "base": ""}</script><script src="/_demo/data-lodge.js"></script><script src="/_demo/demo.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>board · Woltspace</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦫</text></svg>">
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#18100A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="/static/icon-192.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Preahvihear&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=1791141146">
+<link rel="stylesheet" href="/static/design-system.css?v=1791141146">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/css/xterm.min.css">
+<link rel="stylesheet" href="/static/lodge-tools.css?v=1791141146">
+<link rel="stylesheet" href="/static/lodge-tools.css?v=1791141146">
+</head>
+<body>
+
+
+
+<button class="hamburger" onclick="toggleSidebar()">☰</button>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-name">
+      <span class="brand-emoji">🦫</span>
+      Woltspace
+    </div>
+  </div>
+
+  <div class="sidebar-nav">
+    <a class="sidebar-nav-item" id="nav-home" href="/" onclick="showView('home');return false">
+      <span class="sidebar-nav-icon">🏠</span>
+      <span class="sidebar-nav-label">Home</span>
+    </a>
+    <a class="sidebar-nav-item" id="nav-wolts" href="/?view=wolts" onclick="showView('wolts');return false">
+      <span class="sidebar-nav-icon">🦫</span>
+      <span class="sidebar-nav-label">Wolts</span>
+    </a>
+    <a class="sidebar-nav-item" id="nav-sessions" href="/?view=sessions" onclick="showView('sessions');return false">
+      <span class="sidebar-nav-icon">💬</span>
+      <span class="sidebar-nav-label">Sessions</span>
+      <span class="nav-badge" id="sessions-badge"></span>
+    </a>
+    <a class="sidebar-nav-item active" id="nav-apps" href="/?view=apps" onclick="showView('apps');return false">
+      <span class="sidebar-nav-icon">🪓</span>
+      <span class="sidebar-nav-label">Apps</span>
+    </a>
+    <a class="sidebar-nav-item" id="nav-wolves" href="/wolves">
+      <span class="sidebar-nav-icon">🐺</span>
+      <span class="sidebar-nav-label">Wolves</span>
+    </a>
+    <a class="sidebar-nav-item" id="nav-connectors" href="/connectors">
+      <span class="sidebar-nav-icon">🔌</span>
+      <span class="sidebar-nav-label">Connectors</span>
+    </a>
+  </div>
+
+  <div class="sidebar-scroll">
+  <div class="sidebar-section" id="sidebar-team-section">
+    <div class="sidebar-section-label">
+      Team <span id="sidebar-team-count" style="color:rgba(255,255,255,0.4)"></span>
+      <button type="button" class="sidebar-create-wolt" onclick="openCreateWolt(event)">
+        <span aria-hidden="true">+</span> Create wolt
+      </button>
+    </div>
+    <div id="sidebar-wolts"></div>
+  </div>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="sidebar-footer">
+      <a href="/tui">terminal</a>
+      <a href="/settings">⚙ settings</a>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  
+<div id="app-page" class="ds-page app-detail" data-app-name="board" aria-live="polite"><p>loading…</p></div>
+
+</main>
+
+
+<div class="modal-backdrop ds-dialog-backdrop" id="create-modal" onclick="if(event.target===this)closeCreateWolt()">
+  <section class="modal ds-dialog" role="dialog" aria-modal="true" aria-labelledby="create-modal-title" aria-describedby="create-modal-description">
+    <header class="modal-header ds-dialog-header">
+      <div>
+        <h2 class="modal-title" id="create-modal-title">Create a wolt</h2>
+        <p class="ds-dialog-description" id="create-modal-description">Start with a name, then choose how this wolt works.</p>
+      </div>
+      <button type="button" class="modal-close" onclick="closeCreateWolt()" aria-label="Close Create a wolt">&times;</button>
+    </header>
+    
+    <div class="modal-body">
+      <div class="modal-field create-name-field">
+        <label class="modal-label" for="create-name">Wolt name</label>
+        <input type="text" class="modal-input" id="create-name" placeholder="Wolter White" maxlength="40" autocomplete="off" spellcheck="false" oninput="updateCreatePreview()">
+        <p class="create-name-warning" id="create-name-warning" role="alert" hidden></p>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" for="create-harness">Harness <span class="modal-label-hint">(you can change it later in Settings)</span></label>
+        <select class="modal-input" id="create-harness" onchange="selectCreateHarness(this.value)"></select>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Working style</label>
+        <div class="type-grid">
+          <div class="type-card" data-type="otter" onclick="pickType(this)">
+            <div class="type-card-emoji">🦦</div>
+            <div class="type-card-name">Otter</div>
+            <div class="type-card-hint" data-pace="Quick">Quick</div>
+            <div class="type-card-model"></div>
+            <select class="type-card-select" aria-label="Model" hidden></select>
+          </div>
+          <div class="type-card" data-type="beaver" onclick="pickType(this)">
+            <div class="type-card-emoji">🦫</div>
+            <div class="type-card-name">Beaver</div>
+            <div class="type-card-hint" data-pace="Builder">Builder</div>
+            <div class="type-card-model"></div>
+            <select class="type-card-select" aria-label="Model" hidden></select>
+          </div>
+          <div class="type-card" data-type="raccoon" onclick="pickType(this)">
+            <div class="type-card-emoji">🦝</div>
+            <div class="type-card-name">Raccoon</div>
+            <div class="type-card-hint" data-pace="Thinker">Thinker</div>
+            <div class="type-card-model"></div>
+            <select class="type-card-select" aria-label="Model" hidden></select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-error" id="create-error"></div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-ghost" onclick="closeCreateWolt()">Cancel</button>
+      <button type="button" class="btn btn-primary" id="create-submit" onclick="submitCreateWolt()">Create</button>
+    </div>
+
+  </section>
+</div>
+
+<script src="/static/sprites.js?v=1791141146"></script>
+<script src="/static/navigation.js?v=1791141146"></script>
+<script src="/static/session-row.js?v=1791141146"></script>
+<script src="/static/lodge.js?v=1791141146"></script>
+<script type="module" src="/static/terminal.js?v=1791141146"></script>
+<script src="/static/app-page.js?v=1791141146"></script>
+
+</body>
+</html>

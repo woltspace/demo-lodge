@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.__DEMO={"prefix": "", "space": "lodge", "base": ""}</script><script src="/_demo/data-lodge.js"></script><script src="/_demo/demo.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>scribe · Woltspace</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦫</text></svg>">
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#18100A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="/static/icon-192.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Preahvihear&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=1791141177">
+<link rel="stylesheet" href="/static/design-system.css?v=1791141177">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/css/xterm.min.css">
+<link rel="stylesheet" href="/static/lodge-tools.css?v=1791141177">
+<link rel="stylesheet" href="/static/home.css?v=1791141177"><link rel="stylesheet" href="/static/wolt-page.css?v=1791141177">
+</head>
+<body>
+
+<div class="bg-scene" id="bg-scene">
+  <div id="bg-nature"></div><div class="bg-river-shimmer"></div>
+  <div id="cl-1" class="bg-cloud" style="top:38%;animation-duration:150s"></div><div id="cl-2" class="bg-cloud" style="top:52%;animation-duration:115s;animation-delay:-42s"></div><div id="cl-3" class="bg-cloud" style="top:42%;animation-duration:185s;animation-delay:-92s"></div><div id="cl-4" class="bg-cloud" style="top:56%;animation-duration:135s;animation-delay:-68s"></div><div id="cl-5" class="bg-cloud" style="top:46%;animation-duration:165s;animation-delay:-125s"></div><div id="cl-6" class="bg-cloud" style="top:49%;animation-duration:200s;animation-delay:-28s"></div>
+  <div class="bg-beaver-main" id="bg-beaver-main"><div class="sprite-2frame"><div class="frm-a" id="sp-bv-main-a"></div><div class="frm-b" id="sp-bv-main-b"></div></div></div>
+  <div class="bg-beaver-2" id="bg-beaver-2" style="display:none"><div id="sp-bv-side"></div></div>
+  <div class="bg-raccoon" id="bg-raccoon"><div class="sprite-2frame"><div class="frm-a" id="sp-rc-a"></div><div class="frm-b" id="sp-rc-b"></div></div></div>
+  <div class="bg-log" id="bg-log"><div id="sp-log"></div></div><div class="bg-ripple-container"><div class="bg-ripple"></div><div class="bg-ripple"></div><div class="bg-ripple"></div></div>
+  <div class="bg-leaf"><div id="sp-leaf-g"></div></div><div class="bg-peek" id="bg-peek"><div id="sp-peek"></div></div><div class="bg-fish" id="bg-fish"><div id="sp-fish"></div></div>
+</div>
+
+<button class="hamburger" onclick="toggleSidebar()">☰</button>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-name">
+      <span class="brand-emoji">🦫</span>
+      Woltspace
+    </div>
+  </div>
+
+  <div class="sidebar-nav">
+    <a class="sidebar-nav-item" id="nav-home" href="/" onclick="showView('home');return false">
+      <span class="sidebar-nav-icon">🏠</span>
+      <span class="sidebar-nav-label">Home</span>
+    </a>
+    <a class="sidebar-nav-item" id="nav-wolts" href="/?view=wolts" onclick="showView('wolts');return false">
+      <span class="sidebar-nav-icon">🦫</span>
+      <span class="sidebar-nav-label">Wolts</span>
+    </a>
+    <a class="sidebar-nav-item" id="nav-sessions" href="/?view=sessions" onclick="showView('sessions');return false">
+      <span class="sidebar-nav-icon">💬</span>
+      <span class="sidebar-nav-label">Sessions</span>
+      <span class="nav-badge" id="sessions-badge"></span>
+    </a>
+    <a class="sidebar-nav-item" id="nav-apps" href="/?view=apps" onclick="showView('apps');return false">
+      <span class="sidebar-nav-icon">🪓</span>
+      <span class="sidebar-nav-label">Apps</span>
+    </a>
+    <a class="sidebar-nav-item" id="nav-wolves" href="/wolves">
+      <span class="sidebar-nav-icon">🐺</span>
+      <span class="sidebar-nav-label">Wolves</span>
+    </a>
+    <a class="sidebar-nav-item" id="nav-connectors" href="/connectors">
+      <span class="sidebar-nav-icon">🔌</span>
+      <span class="sidebar-nav-label">Connectors</span>
+    </a>
+  </div>
+
+  <div class="sidebar-scroll">
+  <div class="sidebar-section" id="sidebar-team-section">
+    <div class="sidebar-section-label">
+      Team <span id="sidebar-team-count" style="color:rgba(255,255,255,0.4)"></span>
+      <button type="button" class="sidebar-create-wolt" onclick="openCreateWolt(event)">
+        <span aria-hidden="true">+</span> Create wolt
+      </button>
+    </div>
+    <div id="sidebar-wolts"></div>
+  </div>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="sidebar-footer">
+      <a href="/tui">terminal</a>
+      <a href="/settings">⚙ settings</a>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  
+<div class="wolt-page" id="wolt-page" data-wolt-name="scribe">
+  <header class="main-header wolt-page-header">
+    <div class="wolt-heading"><div class="wolt-page-avatar" data-avatar></div><div><h1 class="main-title" data-name></h1><div class="main-subtitle" data-meta></div><div class="wolt-role" data-role></div></div></div>
+    <div class="header-actions"><a class="btn wolt-resume" data-resume hidden>▶ Resume</a><button class="btn btn-ghost" data-new>+ New session</button></div>
+  </header>
+  <nav class="filter-strip" aria-label="Wolt sections">
+    <button class="filter-chip active" data-tab="overview">Overview</button><button class="filter-chip" data-tab="about">About</button><button class="filter-chip" data-tab="settings">Settings</button><button class="filter-chip" data-tab="site">Site</button>
+  </nav>
+  <div class="wolt-page-body" data-body><div class="empty-state"><div class="empty-state-text">loading…</div></div></div>
+</div>
+<script type="application/json" id="wolt-config">{"capabilities": [], "description": "Writes the docs, keeps the voice.", "dir": "scribe", "harness": "claude", "home": "/Users/you/.woltspace/wolts/scribe", "model": "claude-sonnet-5", "name": "scribe", "origin": "user", "role": "docs \u0026 comms", "type": "beaver"}</script>
+
+</main>
+
+
+<div class="modal-backdrop ds-dialog-backdrop" id="create-modal" onclick="if(event.target===this)closeCreateWolt()">
+  <section class="modal ds-dialog" role="dialog" aria-modal="true" aria-labelledby="create-modal-title" aria-describedby="create-modal-description">
+    <header class="modal-header ds-dialog-header">
+      <div>
+        <h2 class="modal-title" id="create-modal-title">Create a wolt</h2>
+        <p class="ds-dialog-description" id="create-modal-description">Start with a name, then choose how this wolt works.</p>
+      </div>
+      <button type="button" class="modal-close" onclick="closeCreateWolt()" aria-label="Close Create a wolt">&times;</button>
+    </header>
+    
+    <div class="modal-body">
+      <div class="modal-field create-name-field">
+        <label class="modal-label" for="create-name">Wolt name</label>
+        <input type="text" class="modal-input" id="create-name" placeholder="Wolter White" maxlength="40" autocomplete="off" spellcheck="false" oninput="updateCreatePreview()">
+        <p class="create-name-warning" id="create-name-warning" role="alert" hidden></p>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" for="create-harness">Harness <span class="modal-label-hint">(you can change it later in Settings)</span></label>
+        <select class="modal-input" id="create-harness" onchange="selectCreateHarness(this.value)"></select>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Working style</label>
+        <div class="type-grid">
+          <div class="type-card" data-type="otter" onclick="pickType(this)">
+            <div class="type-card-emoji">🦦</div>
+            <div class="type-card-name">Otter</div>
+            <div class="type-card-hint" data-pace="Quick">Quick</div>
+            <div class="type-card-model"></div>
+            <select class="type-card-select" aria-label="Model" hidden></select>
+          </div>
+          <div class="type-card" data-type="beaver" onclick="pickType(this)">
+            <div class="type-card-emoji">🦫</div>
+            <div class="type-card-name">Beaver</div>
+            <div class="type-card-hint" data-pace="Builder">Builder</div>
+            <div class="type-card-model"></div>
+            <select class="type-card-select" aria-label="Model" hidden></select>
+          </div>
+          <div class="type-card" data-type="raccoon" onclick="pickType(this)">
+            <div class="type-card-emoji">🦝</div>
+            <div class="type-card-name">Raccoon</div>
+            <div class="type-card-hint" data-pace="Thinker">Thinker</div>
+            <div class="type-card-model"></div>
+            <select class="type-card-select" aria-label="Model" hidden></select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-error" id="create-error"></div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-ghost" onclick="closeCreateWolt()">Cancel</button>
+      <button type="button" class="btn btn-primary" id="create-submit" onclick="submitCreateWolt()">Create</button>
+    </div>
+
+  </section>
+</div>
+
+<script src="/static/sprites.js?v=1791141177"></script>
+<script src="/static/navigation.js?v=1791141177"></script>
+<script src="/static/session-row.js?v=1791141177"></script>
+<script src="/static/lodge.js?v=1791141177"></script>
+<script type="module" src="/static/terminal.js?v=1791141177"></script>
+<script src="/static/home-scene.js?v=1791141177"></script><script src="/static/wolt-page.js?v=1791141177"></script>
+
+</body>
+</html>
