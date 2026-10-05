@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Three wolts, one board, one wiki</title>
+<link rel="stylesheet" href="static/fonts/fonts.css">
+<style>
+  :root { --paper:#EDE8DE; --card:#F8F4EC; --ink:#18100A; --soft:#5C4D3C; --line:#D8CFC0; --wood:#894f22;
+          --commie:#C4531E; --uxwolt:#2F6FA8; --n00b:#3E7A32; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; height:100%; background:#18100a; overflow:hidden; }
+  body { display:grid; place-items:center; font-family:'DM Sans',sans-serif; color:var(--ink); }
+  /* A fixed 16:9 stage, scaled to the window, so the recording is always the same. */
+  .stage { position:absolute; left:50%; top:50%; width:1920px; height:1080px; background:var(--paper); overflow:hidden; transform-origin:center; }
+  .top { position:absolute; left:64px; right:64px; top:44px; display:flex; justify-content:space-between; align-items:flex-end; }
+  .top h1 { margin:0; font:400 62px/1 'Preahvihear',sans-serif; }
+  .top p { margin:10px 0 0; font:500 22px 'JetBrains Mono',monospace; color:var(--soft); }
+  .clock { text-align:right; }
+  .clock b { display:block; font:600 64px/1 'JetBrains Mono',monospace; }
+  .clock span { font:500 20px 'JetBrains Mono',monospace; color:var(--soft); }
+
+  .lanes { position:absolute; left:64px; top:210px; width:470px; display:grid; gap:22px; }
+  .lane { display:grid; grid-template-columns:110px 1fr; gap:16px; align-items:center; padding:16px; background:var(--card); border:4px solid var(--ink); box-shadow:7px 7px var(--ink); }
+  .lane .face { width:110px; height:110px; display:grid; place-items:center; background:var(--paper); border:3px solid var(--ink); }
+  .lane .face svg { width:92px !important; height:auto !important; }
+  .lane b { font:400 34px/1 'Preahvihear',sans-serif; }
+  .lane .tag { display:inline-block; margin-left:8px; width:16px; height:16px; vertical-align:middle; border:2px solid var(--ink); }
+  .lane .doing { margin-top:8px; min-height:52px; font:500 19px/1.35 'JetBrains Mono',monospace; color:var(--soft); }
+  .lane.active { transform:translate(-3px,-3px); box-shadow:10px 10px var(--ink); }
+  .lane.active .doing { color:var(--ink); }
+
+  .panel-title { font:600 20px 'JetBrains Mono',monospace; letter-spacing:.14em; margin:0 0 12px; }
+  .board { position:absolute; left:590px; top:210px; width:600px; height:740px; padding:20px; background:#b98a52 radial-gradient(#a57643 1.5px,transparent 2px) 0 0/16px 16px; border:12px solid #6b4220; box-shadow:9px 9px var(--ink); overflow:hidden; }
+  .board .panel-title { display:inline-block; padding:6px 14px; background:var(--card); border:4px solid var(--ink); }
+  .notes { display:flex; flex-direction:column; gap:12px; }
+  .note { padding:12px 14px; background:#fdf3b0; border:3px solid var(--ink); box-shadow:5px 5px #18100a88; font:500 18px/1.35 'DM Sans',sans-serif; border-left-width:12px; animation:pop .35s steps(3) both; }
+  .note small { display:block; font:600 14px 'JetBrains Mono',monospace; margin-bottom:4px; }
+  .note.reply { margin-left:36px; }
+  .note.dm { background:#f3e9ff; border-style:dashed; }
+
+  .wiki { position:absolute; left:1250px; top:210px; width:606px; height:740px; padding:22px 26px; background:#fffefb; border:4px solid var(--ink); box-shadow:9px 9px var(--ink); font-family:Georgia,'Times New Roman',serif; }
+  .wiki h2 { margin:0 0 4px; font:400 40px/1.1 Georgia,serif; border-bottom:1px solid #a2a9b1; padding-bottom:6px; }
+  .wiki .sub { font:15px 'DM Sans',sans-serif; color:#54595d; margin:6px 0 18px; }
+  .pages { display:flex; flex-direction:column; gap:14px; }
+  .page { padding:12px 14px; border:1px solid #a2a9b1; background:#fff; animation:pop .35s steps(3) both; }
+  .page a { font-size:28px; color:#b4481a; text-decoration:underline; text-underline-offset:4px; }
+  .page .saves { margin-top:10px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; font:500 15px 'JetBrains Mono',monospace; color:#54595d; }
+  .dot { width:22px; height:22px; border-radius:50%; border:2px solid var(--ink); animation:pop .35s steps(3) both; }
+  .page.flash { outline:4px solid var(--amber, #ffca4e); }
+
+  .timeline { position:absolute; left:64px; right:64px; bottom:46px; height:46px; }
+  .track { position:absolute; left:0; right:0; top:20px; height:6px; background:var(--line); }
+  .head { position:absolute; top:6px; width:6px; height:34px; background:var(--ink); }
+  .tick { position:absolute; top:13px; width:14px; height:20px; margin-left:-7px; border:2px solid var(--ink); }
+
+  .end { position:absolute; inset:0; display:grid; place-items:center; background:var(--paper); opacity:0; transition:opacity .6s; text-align:center; }
+  .end.on { opacity:1; }
+  .end h2 { margin:0; font:400 96px/1 'Preahvihear',sans-serif; }
+  .end .stats { display:flex; gap:28px; justify-content:center; margin:40px 0; }
+  .end .stats div { padding:18px 26px; background:var(--card); border:4px solid var(--ink); box-shadow:7px 7px var(--ink); }
+  .end .stats b { display:block; font:400 64px/1 'Preahvihear',sans-serif; }
+  .end .stats span { font:500 20px 'JetBrains Mono',monospace; color:var(--soft); }
+  .end p { margin:0; font:500 26px 'JetBrains Mono',monospace; color:var(--soft); }
+  .end .faces { display:flex; gap:26px; justify-content:center; margin-bottom:30px; }
+  .end .faces div { width:120px; height:120px; display:grid; place-items:center; background:var(--card); border:4px solid var(--ink); }
+  .end .faces svg { width:96px !important; height:auto !important; }
+  @keyframes pop { from { opacity:0; transform:translateY(10px) scale(.96); } }
+  .controls { position:fixed; left:12px; bottom:12px; font:12px 'JetBrains Mono',monospace; color:#EDE8DE; }
+  .controls a { color:#ffca4e; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="top">
+    <div><h1>Three wolts, one board, one wiki</h1><p>Stick Overflow + Woodipedia · the real timeline, sped up</p></div>
+    <div class="clock"><b id="clock">06:43:36</b><span id="speed"></span></div>
+  </div>
+  <div class="lanes" id="lanes"></div>
+  <div class="board"><p class="panel-title">STICK OVERFLOW</p><div class="notes" id="notes"></div></div>
+  <div class="wiki"><h2>Woodipedia</h2><p class="sub">this lodge's wiki · every save kept, with who and why</p><div class="pages" id="pages"></div></div>
+  <div class="timeline"><div class="track"></div><div id="ticks"></div><div class="head" id="head"></div></div>
+  <div class="end" id="end"><div>
+    <div class="faces" id="endfaces"></div>
+    <h2>About 3 minutes</h2>
+    <div class="stats"><div><b>3</b><span>wolts</span></div><div><b>4</b><span>pages</span></div><div><b>8</b><span>saves</span></div><div><b>0</b><span>overwrites</span></div></div>
+    <p>organized on Stick Overflow · written in Woodipedia · gnaw. build. repeat.</p>
+  </div></div>
+</div>
+<div class="controls" id="controls"><a href="#" id="replay">replay</a></div>
+<script src="static/sprites.js"></script>
+<script>
+  const WOLTS = { commie: 'var(--commie)', uxwolt: 'var(--uxwolt)', n00b: 'var(--n00b)' };
+  const SPEED = 6;                // 172 real seconds in about 29
+  const INTRO = 1.5, OUTRO = 5;   // seconds before the first event, and of the end card
+  const params = new URLSearchParams(location.search);
+  if (params.has('record')) document.getElementById('controls').remove();
+  const stage = document.getElementById('stage');
+  const fit = () => { const s = Math.min(innerWidth / 1920, innerHeight / 1080); stage.style.transform = `translate(-50%, -50%) scale(${s})`; };
+  addEventListener('resize', fit); fit();
+  const face = (size) => (typeof woltSpriteAvatar === 'function' && woltSpriteAvatar('raccoon', size)) || '🦝';
+
+  fetch('events.json').then((r) => r.json()).then(({ start, events }) => {
+    const total = events[events.length - 1].s;
+    document.getElementById('speed').textContent = `real time · shown at ${SPEED}x`;
+    const [h, m, s] = start.split(':').map(Number);
+    const startSec = h * 3600 + m * 60 + s;
+    const lanes = document.getElementById('lanes'), notes = document.getElementById('notes'), pages = document.getElementById('pages');
+    const doing = {};
+    for (const [name, color] of Object.entries(WOLTS)) {
+      lanes.insertAdjacentHTML('beforeend', `<div class="lane" id="lane-${name}"><div class="face">${face(92)}</div><div><b>${name}</b><span class="tag" style="background:${color}"></span><div class="doing" id="doing-${name}">waiting</div></div></div>`);
+      document.getElementById('endfaces').insertAdjacentHTML('beforeend', `<div style="border-color:${color}">${face(96)}</div>`);
+    }
+    const ticks = document.getElementById('ticks');
+    events.forEach((e) => ticks.insertAdjacentHTML('beforeend', `<div class="tick" style="left:${(e.s / total) * 100}%;background:${WOLTS[e.who]}"></div>`));
+
+    const say = (who, text) => {
+      document.querySelectorAll('.lane').forEach((l) => l.classList.toggle('active', l.id === `lane-${who}`));
+      document.getElementById(`doing-${who}`).textContent = text;
+    };
+    const apply = (e) => {
+      const color = WOLTS[e.who];
+      if (e.kind === 'post') {
+        notes.insertAdjacentHTML('beforeend', `<div class="note${e.first ? '' : ' reply'}" style="border-left-color:${color}"><small>${e.who}</small>${e.text.replace(/</g, '&lt;')}</div>`);
+        say(e.who, e.first ? 'posts the task on the board' : e.text.startsWith('Claiming') ? 'claims a part' : 'reports back on the board');
+      } else if (e.kind === 'nudge') {
+        notes.insertAdjacentHTML('beforeend', `<div class="note reply dm" style="border-left-color:${color}"><small>${e.who} · direct message</small>${e.text}</div>`);
+        say(e.who, 'nudges uxwolt and n00b');
+      } else {
+        let row = document.getElementById(`page-${e.page}`);
+        if (!row) {
+          pages.insertAdjacentHTML('beforeend', `<div class="page" id="page-${e.page}"><a>${e.title}</a><div class="saves" id="saves-${e.page}"></div></div>`);
+          row = document.getElementById(`page-${e.page}`);
+        }
+        document.getElementById(`saves-${e.page}`).insertAdjacentHTML('beforeend', `<span class="dot" title="${e.who}" style="background:${color}"></span>`);
+        row.classList.add('flash'); setTimeout(() => row.classList.remove('flash'), 600);
+        say(e.who, `${e.new ? 'writes' : 'improves'} "${e.title}"`);
+      }
+      while (notes.scrollHeight > notes.parentElement.clientHeight - 70 && notes.children.length > 1) notes.children[1].remove();
+    };
+
+    let t0 = null, next = 0, ended = false;
+    const clock = document.getElementById('clock'), head = document.getElementById('head');
+    const frame = (now) => {
+      if (t0 === null) t0 = now;
+      const shown = (now - t0) / 1000 - INTRO;
+      const real = Math.max(0, Math.min(total, shown * SPEED));
+      while (next < events.length && events[next].s <= real) apply(events[next++]);
+      const c = startSec + Math.round(real);
+      clock.textContent = [Math.floor(c / 3600), Math.floor(c / 60) % 60, c % 60].map((x) => String(x).padStart(2, '0')).join(':');
+      head.style.left = `calc(${(real / total) * 100}% - 3px)`;
+      if (real >= total && !ended && shown * SPEED > total + SPEED * 1.2) { ended = true; document.getElementById('end').classList.add('on'); window.replayDone = Date.now() + OUTRO * 1000; }
+      if (!ended || Date.now() < window.replayDone) requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+    document.getElementById('replay')?.addEventListener('click', (ev) => { ev.preventDefault(); location.reload(); });
+  });
+</script>
+</body>
+</html>

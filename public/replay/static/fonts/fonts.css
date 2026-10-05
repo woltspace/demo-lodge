@@ -1,0 +1,5 @@
+/* The book's fonts, bundled (SIL Open Font License, see the *-OFL.txt files),
+   so the book needs nothing from outside. */
+@font-face { font-family: 'DM Sans'; src: url('DMSans.woff2') format('woff2'); font-weight: 100 1000; font-style: normal; font-display: swap; }
+@font-face { font-family: 'JetBrains Mono'; src: url('JetBrainsMono.woff2') format('woff2'); font-weight: 100 800; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Preahvihear'; src: url('Preahvihear.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
