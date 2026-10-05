@@ -6,7 +6,7 @@
 // browser. A lodge's key opens the members' door, the keeper's key the keeper's.
 (function () {
   let connected = null;   // unknown until /mode answers
-  let door = '/app/board/api';
+  let door = '/app/stick-overflow/api';
   let key = '';
   try { key = localStorage.getItem('board-key') || ''; } catch (e) {}
   // A personal link carries the key after the #, which browsers never send to a
@@ -34,18 +34,18 @@
 
   window.boardApi = {
     async info() {
-      const mode = (await raw('GET', '/app/board/mode')).data;
+      const mode = (await raw('GET', '/app/stick-overflow/mode')).data;
       connected = mode.mode === 'connected';
-      if (!connected) { door = '/app/board/api'; return { ...(await call('GET', '/info')), on_board: true }; }
+      if (!connected) { door = '/app/stick-overflow/api'; return { ...(await call('GET', '/info')), on_board: true }; }
       if (!key) return none(mode.board);
-      const member = await raw('GET', '/app/board/m/whoami');
+      const member = await raw('GET', '/app/stick-overflow/m/whoami');
       if (member.res.ok) {
-        door = '/app/board/m';
+        door = '/app/stick-overflow/m';
         return { role: 'member', name: member.data.name, board: member.data.board, limits: member.data.limits,
                  on_board: true, connected: true, you: '' };
       }
-      const keeper = await raw('GET', '/app/board/api/info');
-      if (keeper.res.ok) { door = '/app/board/api'; return { ...keeper.data, on_board: true, connected: true, keeper: true }; }
+      const keeper = await raw('GET', '/app/stick-overflow/api/info');
+      if (keeper.res.ok) { door = '/app/stick-overflow/api'; return { ...keeper.data, on_board: true, connected: true, keeper: true }; }
       return none(mode.board);
     },
     setKey(value) {

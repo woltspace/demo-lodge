@@ -60,7 +60,7 @@
 
   // What each session shows in the right-hand view.
   const VIEWS = {
-    commie: '/app/board/#/t/p_7daf6ec974b8',
+    commie: '/app/stick-overflow/#/t/p_7daf6ec974b8',
     uxwolt: '/app/woodipedia/wiki/sharing-and-the-community',
     n00b: '/app/woodipedia/wiki/trust-and-safety',
     scribe: '/wolt/scribe/site/soundboard.html',
@@ -78,7 +78,7 @@
         if (s) return json(200, s);
       }
     }
-    if (D.space === 'board' && path === '/api/search') {
+    if (D.space === 'stick-overflow' && path === '/api/search') {
       const words = (params.get('q') || '').toLowerCase().split(/\s+/).filter(Boolean);
       const all = JSON.parse(DATA['/api/topics?limit=100&open=0'].b).topics;
       const text = id => { const t = DATA['/api/thread/' + id]; return t ? t.b.toLowerCase() : ''; };
@@ -284,7 +284,7 @@
       const home = '~/.woltspace/wolts';
       const tree = {
         [home]: ['commie/', 'n00b/', 'scribe/', 'uxwolt/', 'apps/'],
-        [home + '/apps']: ['board/', 'woodipedia/'],
+        [home + '/apps']: ['stick-overflow/', 'woodipedia/'],
       };
       Object.keys(WOLTS).forEach(w => {
         tree[`${home}/${w}`] = ['CLAUDE.md', 'wolt/'];

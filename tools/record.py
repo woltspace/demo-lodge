@@ -15,7 +15,7 @@ from playwright.sync_api import sync_playwright
 OUT = sys.argv[1]
 PORT = int(sys.argv[2]) if len(sys.argv) > 2 else 7790
 LODGE = f"http://127.0.0.1:{PORT}"
-APPS = {"board": f"http://board.localhost:{PORT}", "woodipedia": f"http://woodipedia.localhost:{PORT}"}
+APPS = {"stick-overflow": f"http://stick-overflow.localhost:{PORT}", "woodipedia": f"http://woodipedia.localhost:{PORT}"}
 WOLTS = ["commie", "uxwolt", "n00b", "scribe"]
 
 ORIGINS = {urlsplit(LODGE).netloc: "lodge", **{urlsplit(u).netloc: n for n, u in APPS.items()}}
@@ -52,7 +52,7 @@ with sync_playwright() as p:
 
     # The lodge
     for path in ["/", "/?view=wolts", "/?view=sessions", "/?view=apps", "/wolves", "/connectors",
-                 "/settings", "/tui", "/terminal", "/a/board", "/a/woodipedia"]:
+                 "/settings", "/tui", "/terminal", "/a/stick-overflow", "/a/woodipedia"]:
         visit(pg, LODGE + path)
     for w in WOLTS:
         for path in [f"/w/{w}", f"/wolt/{w}/site/", f"/wolt/{w}/_/", f"/wolt/{w}/_/memory", f"/wolt/{w}/_/settings"]:
@@ -60,12 +60,12 @@ with sync_playwright() as p:
     visit(pg, LODGE + "/wolt/scribe/site/soundboard.html")
 
     # Stick Overflow: the list, every thread, the ask page
-    visit(pg, APPS["board"] + "/", 2500)
+    visit(pg, APPS["stick-overflow"] + "/", 2500)
     topics = json.loads(pg.evaluate("fetch('/api/topics?limit=100&open=0').then(r => r.text())"))["topics"]
     for t in topics:
-        visit(pg, APPS["board"] + f"/#/t/{t['id']}", 900)
+        visit(pg, APPS["stick-overflow"] + f"/#/t/{t['id']}", 900)
     for h in ["#/new", "#/mine", "#/open", "#/lodges"]:
-        visit(pg, APPS["board"] + "/" + h, 900)
+        visit(pg, APPS["stick-overflow"] + "/" + h, 900)
 
     # Woodipedia: every page, its edit and history pages, every old version
     wiki = APPS["woodipedia"]

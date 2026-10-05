@@ -26,7 +26,7 @@ ROOTS = {
     "lodge": ["static", "w", "wolt", "a", "app", "tui", "terminal", "settings", "connectors", "wolves",
               "sessions", "wolts", "apps", "harnesses", "onboarding", "onboard", "health", "tunnel",
               "history", "wolf", "current", "placeholder.html", "views", "sites", "tools", "version"],
-    "board": ["api", "mode", "m"],
+    "stick-overflow": ["api", "mode", "m"],
     "woodipedia": ["wiki", "all", "recent", "new", "search", "media"],
 }
 
@@ -51,7 +51,7 @@ def space_base(space):
 def sanitize(text):
     text = SCRATCH_WOLTS.sub("/Users/you/.woltspace/wolts", text)
     text = SCRATCH_HOME.sub("/Users/you", text)
-    text = re.sub(r"(board|woodipedia)\.localhost:7790", r"\1.localhost:7777", text)
+    text = re.sub(r"(stick-overflow|woodipedia)\.localhost:7790", r"\1.localhost:7777", text)
     return text.replace("127.0.0.1:7790", "127.0.0.1:7777").replace("localhost:7790", "localhost:7777")
 
 
@@ -139,16 +139,16 @@ def main():
     data["lodge"]["/sessions?view=lodge"]["b"] = json.dumps(
         {"sessions": sessions, "totals": {w: 1 for w, *_ in SESSIONS}})
     data["lodge"]["/sessions"] = {"s": 200, "t": "application/json", "b": json.dumps(sessions)}
-    info = json.loads(data["board"]["/api/info"]["b"])
+    info = json.loads(data["stick-overflow"]["/api/info"]["b"])
     info["creatures"] = {"commie": "raccoon", "uxwolt": "raccoon", "n00b": "raccoon", "scribe": "beaver"}
-    data["board"]["/api/info"]["b"] = json.dumps(info)
+    data["stick-overflow"]["/api/info"]["b"] = json.dumps(info)
 
     for space, entries in data.items():
         (OUT / "_demo" / f"data-{space}.js").write_text(
             "window.__DEMO_DATA=" + json.dumps(entries, ensure_ascii=False) + ";\n")
     shutil.copy(HERE / "demo.js", OUT / "_demo" / "demo.js")
     # Short standalone links to each app, to share without the lodge around them.
-    for short, app in (("stick-overflow", "board"), ("woodipedia", "woodipedia")):
+    for short, app in (("stick-overflow", "stick-overflow"), ("woodipedia", "woodipedia")):
         target = f"{PREFIX}/app/{app}/"
         (OUT / short).mkdir(exist_ok=True)
         (OUT / short / "index.html").write_text(
